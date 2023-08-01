@@ -155,3 +155,4 @@ cython_debug/
 # MacOS
 .DS_Store
 dataset/
+results/
