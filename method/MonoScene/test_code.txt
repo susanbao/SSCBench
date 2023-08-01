@@ -1,0 +1,12 @@
+source ~/.bashrc
+mono
+cdssc
+
+cd ./monoscene/scripts/
+CUDA_VISIBLE_DEVICES=0,1,2,3 python train_monoscene.py
+
+CUDA_VISIBLE_DEVICES=0,1,2,3 python train_monoscene_kitti_360.py
+
+
+eval:
+CUDA_VISIBLE_DEVICES=0,1,2,3 python eval_monoscene_kitti.py >logs/eval_monoscene_kitti.log 2>logs/eval_monoscene_kitti.err&
