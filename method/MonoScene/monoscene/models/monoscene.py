@@ -123,12 +123,15 @@ class MonoScene(pl.LightningModule):
         self.test_metrics = SSCMetrics(self.n_classes)
 
     def save_results_and_target(self, pred, target, batch):
-        basic_path = "/data4/sas20048/SSCBench/results/" + self.dataset + "/0/"
+        basic_path = "/data4/sas20048/SSCBench/results/" + self.dataset + "/1/"
         check_folder(basic_path)
-        path = basic_path + batch['sequence'][0] + "_" + batch['frame_id'][0] + ".npz"	
-        # json_object = {'pred': pred.tolist(), 'target': target.tolist()}	
+        # path = basic_path + batch['sequence'][0] + "_" + batch['frame_id'][0] + ".npz"	
+        # # json_object = {'pred': pred.tolist(), 'target': target.tolist()}	
+        # with open(path, 'wb') as outfile:	
+        #     np.savez(outfile, x=pred, y=target)
+        path = basic_path + batch['sequence'][0] + "_" + batch['frame_id'][0] + ".npy"
         with open(path, 'wb') as outfile:	
-            np.savez(outfile, x=pred, y=target)
+            np.save(outfile, pred)
 
     def forward(self, batch):
 

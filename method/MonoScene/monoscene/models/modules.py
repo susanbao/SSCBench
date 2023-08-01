@@ -58,6 +58,8 @@ class SegmentationHead(nn.Module):
     def __init__(self, inplanes, planes, nbr_classes, dilations_conv_list):
         super().__init__()
 
+        self.enable_dropout = True
+
         # First convolution
         self.conv0 = nn.Conv3d(inplanes, planes, kernel_size=3, padding=1, stride=1)
 
@@ -91,6 +93,8 @@ class SegmentationHead(nn.Module):
             planes, nbr_classes, kernel_size=3, padding=1, stride=1
         )
 
+        self.dropout = nn.Dropout3d(p=0.2)
+
     def forward(self, x_in):
 
         # Convolution to go from inplanes to planes features...
@@ -100,6 +104,9 @@ class SegmentationHead(nn.Module):
         for i in range(1, len(self.conv_list)):
             y += self.bn2[i](self.conv2[i](self.relu(self.bn1[i](self.conv1[i](x_in)))))
         x_in = self.relu(y + x_in)  # modified
+
+        if self.enable_dropout:
+            x_in = self.dropout(x_in)
 
         x_in = self.conv_classes(x_in)
 
