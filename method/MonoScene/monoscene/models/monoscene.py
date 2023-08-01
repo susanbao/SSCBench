@@ -11,7 +11,14 @@ import numpy as np
 import torch.nn.functional as F
 from monoscene.models.unet2d import UNet2D
 from torch.optim.lr_scheduler import MultiStepLR
+import ipdb	
+import json
+import os
 
+def check_folder(folder_path):
+    if not os.path.exists(folder_path):
+        os.mkdir(folder_path)
+    return folder_path
 
 class MonoScene(pl.LightningModule):
     def __init__(
@@ -114,6 +121,14 @@ class MonoScene(pl.LightningModule):
         self.train_metrics = SSCMetrics(self.n_classes)
         self.val_metrics = SSCMetrics(self.n_classes)
         self.test_metrics = SSCMetrics(self.n_classes)
+
+    def save_results_and_target(self, pred, target, batch):
+        basic_path = "/data4/sas20048/SSCBench/results/" + self.dataset + "/0/"
+        check_folder(basic_path)
+        path = basic_path + batch['sequence'][0] + "_" + batch['frame_id'][0] + ".npz"	
+        # json_object = {'pred': pred.tolist(), 'target': target.tolist()}	
+        with open(path, 'wb') as outfile:	
+            np.savez(outfile, x=pred, y=target)
 
     def forward(self, batch):
 
@@ -263,6 +278,7 @@ class MonoScene(pl.LightningModule):
 
         y_true = target.cpu().numpy()
         y_pred = ssc_pred.detach().cpu().numpy()
+        self.save_results_and_target(y_pred, y_true, batch)
         y_pred = np.argmax(y_pred, axis=1)
         metric.add_batch(y_pred, y_true)
 

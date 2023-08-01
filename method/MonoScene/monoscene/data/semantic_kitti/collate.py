@@ -23,11 +23,11 @@ def collate_fn(batch):
         cam_ks.append(torch.from_numpy(input_dict["cam_k"]).double())
         T_velo_2_cams.append(torch.from_numpy(input_dict["T_velo_2_cam"]).float())
 
-        if "frustums_masks" in input_dict:
-            frustums_masks.append(torch.from_numpy(input_dict["frustums_masks"]))
-            frustums_class_dists.append(
-                torch.from_numpy(input_dict["frustums_class_dists"]).float()
-            )
+        # if "frustums_masks" in input_dict:
+        #     frustums_masks.append(torch.from_numpy(input_dict["frustums_masks"]))
+        #     frustums_class_dists.append(
+        #         torch.from_numpy(input_dict["frustums_class_dists"]).float()
+        #     )
 
         for key in data:
             data[key].append(torch.from_numpy(input_dict[key]))
