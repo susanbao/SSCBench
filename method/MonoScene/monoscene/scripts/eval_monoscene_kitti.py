@@ -67,7 +67,7 @@ def main(config: DictConfig):
             get_original_cwd(), "trained_models", "monoscene_nyu.ckpt"
         )
     else:
-        model_path = "/data4/sas20048/SSCBench/results/ckpts/monoscene_kitti.ckpt"
+        model_path = "/data4/sas20048/SSCBench/results/ckpts/kitti/monoscene_kitti.ckpt"
 
     model = MonoScene.load_from_checkpoint(
         model_path,
